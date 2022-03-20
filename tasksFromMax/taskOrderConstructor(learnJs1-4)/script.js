@@ -33,7 +33,7 @@ function Shop (addItem, removeItem, getCheck, lockOrder, unlockOrder) {
     };
 
     this.removeItem = function(item, coun) {
-        if (isLocked == false) {
+        if ((isLocked == false) && (list[item.name][item.price] > coun)) {
             if (coun == undefined || coun == '' || list[item.name][item.price] == coun) {
                 delete list[item.name];
             } else {
@@ -74,7 +74,7 @@ check.addItem(milk);
 check.lockOrder();
 check.addItem(chips);
 check.unlockOrder();
-check.removeItem(beer, 1);
+check.removeItem(beer, 10);
 check.getCheck();
 
 /* Что выводит:
