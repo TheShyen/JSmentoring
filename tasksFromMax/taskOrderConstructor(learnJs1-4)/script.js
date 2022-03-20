@@ -2,19 +2,19 @@
 const beer = {
     name: "Пиво",
     price: 120,
-    counts: 1,
+    counts: 7,
 };
 
 const milk = {
     name: "Молоко",
     price: 80,
-    counts: 2,
+    counts: 5,
 };
 
 const chips = {
     name: "Чипсы",
     price: 99,
-    counts: 1,
+    counts: 10,
 };
 
 let list = {};
@@ -25,8 +25,12 @@ function Shop (addItem, removeItem, getCheck, lockOrder, unlockOrder) {
         list[item.name] = { [item.price] : item.counts };
     };
 
-    this.removeItem = function(item) {
-        delete list[item.name];
+    this.removeItem = function(item, coun) {
+        if (coun == undefined || coun == '' || list[item.name][item.price] == coun) {
+            delete list[item.name];
+        } else {
+            list[item.name][item.price] -= coun;
+        }
         
     };
 
