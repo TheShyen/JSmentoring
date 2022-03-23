@@ -2,89 +2,84 @@
 const beer = {
     name: "Пиво",
     price: 120,
-    counts: 5,
 };
 
 const milk = {
     name: "Молоко",
     price: 80,
-    counts: 2,
 };
 
 const chips = {
     name: "Чипсы",
     price: 99,
-    counts: 7,
 };
 
-let list = {};
-let count = 0;
-let isLocked = false;
 
-function Shop (addItem, removeItem, getCheck, lockOrder, unlockOrder) {
+function OrderConctructor() {
+    this.list = {};
+    this.count = 0;
+    this.total = 0;
+    this.countByName= {};
+    this.isLocked = false;
 
     this.addItem = function(item) {
-        if (isLocked == false){
-            list[item.name] = { [item.price] : item.counts };
+            if (this.isLocked) {
+                console.log("Нельзя добавлять позиции");
+                return;
+            }
+            this.list[item.name] = item.price ;
+            this.countByName[item.name] = (this.countByName[item.name] || 0) + 1;      
+    };
+
+    this.removeItem = function(item, count) {
+        if (this.isLocked || this.countByName[item.name] < count) {
+            console.log("Невозможно убрать больше позиций, чем имеется");
+            return;
+        }
+        if (count == undefined) {
+            delete this.list[item.name];
         } else {
-            console.log("Запрещено добавлять позиции");
+            this.countByName[item.name] -= count;
         }
         
     };
 
-    this.removeItem = function(item, coun) {
-        if ((isLocked == false) && (list[item.name][item.price] > coun)) {
-            if (coun == undefined || coun == '' || list[item.name][item.price] == coun) {
-                delete list[item.name];
-            } else {
-                list[item.name][item.price] -= coun;
-            }
-        } else {
-            console.log("Запрещено убирать позиции");
-        }  
-    };
-
-    this.getCheck = function() {
-        let total = 0;
-        for (let key in list) {
-            console.log ("---",key, "---");
-            for (let pr in list[key]) {
-                console.log("Цена:", pr, "|", "Кол-во:", list[key][pr]);
-                count += +list[key][pr];
-                total += +(pr * list[key][pr]);
-                console.log("Итого за", list[key][pr], "шт. -", (pr * list[key][pr]), "рублей.");
-            }
+     this.getCheck = function() {
+        for (let key in this.list) {
+            const price = this.list[key];
+            const quantity = this.countByName[key];
+            console.log ("---",key, "---");   
+            console.log("Цена:", price, "|", "Кол-во:", quantity);
+            this.total += price * quantity;
+            this.count +=  quantity;
         }
-        console.log("Всего товаров в чеке: ", count);
-        console.log("Общий итог:", total, "рублей.");
+        console.log("Всего товаров в чеке: ", this.count);
+        console.log("Общий итог:", this.total, "рублей.");
     };
 
     this.lockOrder = function() {
-        isLocked = true;
+        this.isLocked = true;
     };
 
     this.unlockOrder = function() {
-        isLocked = false;
+        this.isLocked = false;
     };
-}
 
-let check = new Shop();
+}
+let check = new OrderConctructor();
+check.addItem(beer);
+check.addItem(beer);
 check.addItem(beer);
 check.addItem(milk);
+check.addItem(milk);
+check.addItem(milk);
+check.addItem(milk);
+check.addItem(chips);
+check.addItem(chips);
 check.lockOrder();
 check.addItem(chips);
+check.addItem(chips);
 check.unlockOrder();
-check.removeItem(beer, 10);
+check.removeItem(beer, 1);
 check.getCheck();
 
-/* Что выводит:
-Запрещено добавлять позиции
- --- Пиво ---
- Цена: 120 | Кол-во: 4
- Итого за 4 шт. - 480 рублей.
- --- Молоко ---
- Цена: 80 | Кол-во: 2
- Итого за 2 шт. - 160 рублей.
- Всего товаров в чеке:  6
- Общий итог: 640 рублей. 
- */
