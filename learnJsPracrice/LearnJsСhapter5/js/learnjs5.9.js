@@ -1,6 +1,6 @@
 'use strict';
 
-/* let salaries = {
+let salaries = {
     "John": 100,
     "Pete": 300,
     "Mary": 250
@@ -28,20 +28,20 @@ let user = {
 function count(obj){
     return Object.keys(obj).length;
 }
-alert( count(user) ); */
+alert( count(user) );
 
 
-/* function getWeekDay(date) {
+function getWeekDay(date) {
   let days = ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
 
   return days[date.getDay()];
 }
 
 let date = new Date(2014, 0, 3);
-alert( getWeekDay(date) ); */
+alert( getWeekDay(date) );
 
 
-/* function getLocalDay(date) {
+function getLocalDay(date) {
   let day = date.getDay();
 
   if (day == 0) { 
@@ -53,9 +53,9 @@ alert( getWeekDay(date) ); */
 
 
 let date = new Date(2012, 0, 3);
-alert( getLocalDay(date) ); */
+alert( getLocalDay(date) );
 
-/* function getDateAgo(date, days) {
+function getDateAgo(date, days) {
 	let dateCopy = new Date(date);
 
   	dateCopy.setDate(date.getDate() - days);
@@ -66,19 +66,19 @@ let date = new Date(2015, 0, 2);
 
 alert( getDateAgo(date, 1) ); // 1, (1 Jan 2015)
 alert( getDateAgo(date, 2) ); // 31, (31 Dec 2014)
-alert( getDateAgo(date, 365) ); // 2, (2 Jan 2014) */
+alert( getDateAgo(date, 365) ); // 2, (2 Jan 2014)
 
-/* function getLastDayOfMonth(year, month){
+function getLastDayOfMonth(year, month){
 	let date = new Date(year, month + 1, 0);
   	return date.getDate();
 }
 
-let date = new Date(2012, 1); */
+let date = new Date(2012, 1);
 
-/* function getSecondsToday() {
+function getSecondsToday() {
 	let d = new Date();
   	return d.getHours() * 3600 + d.getMinutes() * 60 + d.getSeconds();
-} */
+}
 
 let room = {
 	number: 23
