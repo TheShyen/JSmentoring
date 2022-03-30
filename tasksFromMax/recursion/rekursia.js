@@ -1,6 +1,6 @@
 'use strict';
 
-/* function sequenceSum(begin, end) {
+function sequenceSum(begin, end) {
     if (begin == end) {
         return begin;
     } else if (begin > end){
@@ -10,7 +10,7 @@
     return begin + sequenceSum(begin + 1, end);
 }
 
-console.log(sequenceSum(1, 3)); */
+console.log(sequenceSum(1, 3));
 
 function getStringCount(object) {
     if (typeof object == 'string'){
