@@ -20,12 +20,8 @@ function OrderConctructor() {
     this.count = 0;
     this.countByName= {};
     this.isLocked = false;
-    let now = new Date();
-    let Hour = now.getHours();
-    let Minutes = now.getMinutes();
-    let Seconds = now.getSeconds();
-    this.callData = {};
-    this.array = [];
+    this.callDataAdd = {};
+    this.callDataRemove = {};
 
     this.addItem = function(item) {
             if (this.isLocked) {
@@ -34,8 +30,8 @@ function OrderConctructor() {
             }
             this.productList[item.name] = item.price ;
             this.countByName[item.name] = (this.countByName[item.name] || 0) + 1;
-            this.callData.date = "Время: "+Hour+":"+Minutes+":"+Seconds;
-            this.callData[item.name] = this.countByName[item.name];
+            this.callDataAdd[item.name] = this.countByName[item.name];
+
     };
 
     this.removeItem = function(item, count) {
@@ -45,14 +41,12 @@ function OrderConctructor() {
         }
         if (count == undefined) {
             delete this.productList[item.name];
+            count = this.countByName[item.name];
         } else {
-            this.callData.remove = {};
-            this.callData.remove[item.name] = count;
-            Object.entries(this.callData.remove);
-            this.array = Object.entries(this.callData);
             this.countByName[item.name] -= count;
         }
-        
+        this.callDataRemove[item.name] = count;
+           
     };
 
      this.getCheck = function() {
@@ -78,14 +72,22 @@ function OrderConctructor() {
     };
 
     this.getLog = function() {
-        let map = new Map();
-        console.log(map.set("add", this.array));
+        let addLog = Object.entries(this.callDataAdd);
+        let removeLog = Object.entries(this.callDataRemove);
+        console.log(addLog);
+        console.log(removeLog);
+        for (let i = addLog.length - 1; i >= 0; i--){
+            let data = new Date();  
+            let time  = data.getHours() + ":" +  data.getMinutes() + ":" +  data.getSeconds();
+            console.log("Время:", time, "Добавлено:", addLog[i][0], addLog[i][1], "шт.");
+        }
 
-
-
-       /*  for (let key in this.productList) {
-            console.log("Время: "+Hour+":"+Minutes+":"+Seconds, "Добавлено:", key, this.countByName[key], "шт.");
-        } */
+        for (let i = removeLog.length - 1; i >= 0; i--){
+            let data = new Date();  
+            let time  = data.getHours() + ":" +  data.getMinutes() + ":" +  data.getSeconds();
+            console.log("Время:", time, "Удалено:", removeLog[i][0], removeLog[i][1], "шт.");
+        }
+   
     };
 
 }
@@ -103,9 +105,8 @@ check.lockOrder();
 check.addItem(chips);
 check.addItem(chips);
 check.unlockOrder();
-check.removeItem(beer, 1);
+check.removeItem(beer);
 check.removeItem(milk, 2);
-check.removeItem(beer, 1);
 check.getCheck();
 check.getLog();
 
