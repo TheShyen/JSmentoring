@@ -82,6 +82,7 @@ function OrderConctructor() {
     };
 
     this.getLog = function() {
+        console.log("---------------");
         for (let i = this.log.length - 1; i >= 0; i--) {
             console.log(this.log[i][0]);
         }
