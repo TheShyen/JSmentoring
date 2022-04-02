@@ -20,21 +20,28 @@ function OrderConctructor() {
     this.count = 0;
     this.countByName= {};
     this.isLocked = false;
-    this.callDataAdd = {};
-    this.callDataRemove = {};
+    this.log = [];
+    this.map = new Map();
+    let counter = 0;
 
     this.addItem = function(item) {
-            if (this.isLocked) {
-                console.log("Нельзя добавлять позиции");
-                return;
-            }
-            this.productList[item.name] = item.price ;
-            this.countByName[item.name] = (this.countByName[item.name] || 0) + 1;
-            this.callDataAdd[item.name] = this.countByName[item.name];
+        let date = new Date();
+        let time  = date.getHours() + ":" +  date.getMinutes() + ":" +  date.getSeconds();
+        if (this.isLocked) {
+            console.log("Нельзя добавлять позиции");
+            return;
+        }
+        this.productList[item.name] = item.price ;
+        this.countByName[item.name] = (this.countByName[item.name] || 0) + 1;
+        this.log.push(["Время: "+ time + " Добавлено: "+ item.name + " в количестве " + 1 + " шт."]);
+        counter++;
+
 
     };
 
-    this.removeItem = function(item, count) {
+    this.removeItem = function(item, count) { 
+        let date = new Date();
+        let time  = date.getHours() + ":" +  date.getMinutes() + ":" +  date.getSeconds();
         if (this.isLocked || this.countByName[item.name] < count) {
             console.log("Чек заблокирован");
             return;
@@ -45,7 +52,8 @@ function OrderConctructor() {
         } else {
             this.countByName[item.name] -= count;
         }
-        this.callDataRemove[item.name] = count;
+        this.log.push(["Время: " + time + " Удалено: " + item.name + " в количестве " + count + " шт."]);
+        counter++;
            
     };
 
@@ -72,20 +80,8 @@ function OrderConctructor() {
     };
 
     this.getLog = function() {
-        let addLog = Object.entries(this.callDataAdd);
-        let removeLog = Object.entries(this.callDataRemove);
-        console.log(addLog);
-        console.log(removeLog);
-        for (let i = addLog.length - 1; i >= 0; i--){
-            let data = new Date();  
-            let time  = data.getHours() + ":" +  data.getMinutes() + ":" +  data.getSeconds();
-            console.log("Время:", time, "Добавлено:", addLog[i][0], addLog[i][1], "шт.");
-        }
-
-        for (let i = removeLog.length - 1; i >= 0; i--){
-            let data = new Date();  
-            let time  = data.getHours() + ":" +  data.getMinutes() + ":" +  data.getSeconds();
-            console.log("Время:", time, "Удалено:", removeLog[i][0], removeLog[i][1], "шт.");
+        for (let i = this.log.length - 1; i >= 0; i--) {
+            console.log(this.log[i][0]);
         }
    
     };
@@ -93,11 +89,15 @@ function OrderConctructor() {
 }
 let check = new OrderConctructor();
 check.addItem(beer);
+check.addItem(milk);
 check.addItem(beer);
+check.addItem(chips);
 check.addItem(beer);
 check.addItem(milk);
+check.addItem(chips);
 check.addItem(milk);
 check.addItem(milk);
+check.removeItem(milk, 2);
 check.addItem(milk);
 check.addItem(chips);
 check.addItem(chips);
@@ -106,7 +106,6 @@ check.addItem(chips);
 check.addItem(chips);
 check.unlockOrder();
 check.removeItem(beer);
-check.removeItem(milk, 2);
 check.getCheck();
 check.getLog();
 
