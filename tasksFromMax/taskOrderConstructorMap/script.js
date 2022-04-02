@@ -26,14 +26,14 @@ function OrderConctructor() {
 
     this.addItem = function(item) {
         let date = new Date();
-        let time  = date.getHours() + ":" +  date.getMinutes() + ":" +  date.getSeconds();
+        let time = date.getHours() + ":" +  date.getMinutes() + ":" +  date.getSeconds();
         if (this.isLocked) {
             console.log("Нельзя добавлять позиции");
             return;
         }
         this.productList[item.name] = item.price ;
         this.countByName[item.name] = (this.countByName[item.name] || 0) + 1;
-        this.log.push(["Время: "+ time + " Добавлено: "+ item.name + " в количестве " + 1 + " шт."]);
+        this.log.push(["Время: "+ time + " Добавлено: " + item.name + " в количестве " + 1 + " шт."]);
         /* this.map.set(counter, this.log = [["Время:","Добавлено:", item.name, 1,"шт."]]); */
         counter++;
 
@@ -42,7 +42,7 @@ function OrderConctructor() {
 
     this.removeItem = function(item, count) { 
         let date = new Date();
-        let time  = date.getHours() + ":" +  date.getMinutes() + ":" +  date.getSeconds();
+        let time = date.getHours() + ":" +  date.getMinutes() + ":" +  date.getSeconds();
         if (this.isLocked || this.countByName[item.name] < count) {
             console.log("Чек заблокирован");
             return;
@@ -64,7 +64,7 @@ function OrderConctructor() {
         for (let key in this.productList) {
             const price = this.productList[key];
             const quantity = this.countByName[key];
-            console.log ("---",key, "---");   
+            console.log("---",key, "---");   
             console.log("Цена:", price, "|", "Кол-во:", quantity);
             total += price * quantity;
             this.count +=  quantity;
