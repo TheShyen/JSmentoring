@@ -34,15 +34,12 @@ function OrderConctructor() {
         this.productList[item.name] = item.price ;
         this.countByName[item.name] = (this.countByName[item.name] || 0) + 1;
         this.log.push(["Время: "+ time + " Добавлено: " + item.name + " в количестве " + 1 + " шт."]);
-        /* this.map.set(counter, this.log = [["Время:","Добавлено:", item.name, 1,"шт."]]); */
-        counter++;
-
-
     };
 
     this.removeItem = function(item, count) { 
         let date = new Date();
         let time = date.getHours() + ":" +  date.getMinutes() + ":" +  date.getSeconds();
+
         if (this.isLocked || this.countByName[item.name] < count) {
             console.log("Чек заблокирован");
             return;
@@ -54,9 +51,6 @@ function OrderConctructor() {
             this.countByName[item.name] -= count;
         }
         this.log.push(["Время: " + time + " Удалено: " + item.name + " в количестве " + count + " шт."]);
-        /* this.map.set(counter, this.log = [["Время:","Удалено:", item.name, count ,"шт."]]); */
-        counter++;
-           
     };
 
      this.getCheck = function() {
@@ -111,4 +105,3 @@ check.unlockOrder();
 check.removeItem(beer);
 check.getCheck();
 check.getLog();
-
