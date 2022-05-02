@@ -6,10 +6,10 @@
 // 4. Куда записывается каждое свойство?
 // 5. Что выведется в результате выполнения for и spread? Почему?
 
-/* class Item {
+class Item {
     data = 10; // свойство объекта при создании
     get name() {
-        return "pedik";
+        return "hi!";
     }
     get() {} // записывается в Item.prototype
     static data = 20; // записыватеся как Item.data
@@ -22,8 +22,8 @@ for (const key in new Item()) { console.log(key); } // data
 //
 console.log({...new Item()}); // data: 10
 console.log({...Item}); // data: 20
-console.log(Item.prototype);
-console.log(a.name); */
+console.log(Item.prototype.name); // геттеры в прототипах
+console.log(a.name);
 
 
 class Car {
