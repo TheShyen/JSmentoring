@@ -6,9 +6,12 @@
 // 4. Куда записывается каждое свойство?
 // 5. Что выведется в результате выполнения for и spread? Почему?
 
-class Item {
+/* class Item {
     data = 10; // свойство объекта при создании
-    gett() {} // записывается в Item.prototype
+    get name() {
+        return "pedik";
+    }
+    get() {} // записывается в Item.prototype
     static data = 20; // записыватеся как Item.data
     static get() {} // записывается как Item.get
 }
@@ -19,7 +22,46 @@ for (const key in new Item()) { console.log(key); } // data
 //
 console.log({...new Item()}); // data: 10
 console.log({...Item}); // data: 20
-console.log(a);
+console.log(Item.prototype);
+console.log(a.name); */
+
+
+class Car {
+    
+    constructor (name) {
+        this.nameModel = name;
+        this.speed = 90;
+    }
+    static value = 50;
+    static get() {}
+    go() {
+        console.log(this.nameModel + " " + "edet epta");
+    }
+    stop() {
+        console.log("притормози пацанчик");
+    }
+    
+}
+let lada = new Car("Lada");
+Car.prototype.refueling = function() {
+    console.log(this.nameModel + " " + "заправился ебать");
+};
+Car.prototype.ref = function() {
+    console.log(this.nameModel + " " + "заправился");
+};
+
+for(let prop in lada) {
+    console.log(prop); // nameModel, speed, refueling
+}
+
+for(let prop in lada) {
+    if(lada.hasOwnProperty(prop)) {
+        console.log(prop); // nameModel, speed
+    }
+}
+// spread берет только собственные (не наследуемые) и перечислимые свойства объекта
+console.log({...lada}); // {nameModel: 'Lada', speed: 90}
+console.log({...Car}); // здесь только статическое поле
 
 
 // Ответы: 
