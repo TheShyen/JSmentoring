@@ -25,31 +25,29 @@ class Item extends BasicItem {
 //
 console.log(new Item(1000).getProp()); // 2105 */
 
-const baseItem = {
-    cost: 11111,
-    getParentPropp() {
-        this._parentPropp = this._testPropp + 100;
-        return this._parentPropp;
-    },
-    getCost() {
-        return this.cost;
-    }
+function BasicItem(_testProp) {
+    this._parentProp = _testProp + 100;
+
+}
+BasicItem.prototype.getParentProp = function() {
+    return this._parentProp;
 };
 
-const item = {  
-    data: 5,
-    getPropp(_testPropp) {
-        this._testPropp = _testPropp;
-        return this._testPropp + this.getParentPropp() + this.data;
-    }
+function Item(_testProp) {
+    BasicItem.apply(this, arguments);
+    this._testProp = _testProp;
+}
+Item.data = 5;
+
+
+Item.prototype = Object.create(BasicItem.prototype);
+
+Item.prototype.getProp = function() {
+    return this._testProp + this.getParentProp() + Item.data;
 };
-Object.setPrototypeOf(item, baseItem);
-//Object.setPrototypeOf(baseItem, item); TypeError: Cyclic __proto__ value
-// item.__proto__= baseItem;
 
-
-console.log(item.getPropp(1000)); // 2105
-console.log(item.getParentPropp()); // 1100
-
-
+console.log(new Item(1000).getProp()); // 2105
+console.log(Item.prototype); // getProp: ƒ ()
+                                //[[Prototype]]: Object
+                                    //getParentProp: ƒ ()
 
