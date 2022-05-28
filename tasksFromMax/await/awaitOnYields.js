@@ -1,15 +1,22 @@
+'use strict';
 export default function awaitOnYields(generatorToProcess) {
-	function callNext() {
-		let v = generatorToProcess.next();
-		if (v.done === false) {
-		  v.value.then((res) => {
-			awaitResults.push(res);
-			callNext();
-		  });
+	const generator = generatorToProcess();
+	function handler(result){
+		if (result.done) {
+			return Promise.resolve(result.value);
 		}
+		return Promise.resolve(result.value)
+		.then(res => {
+		  return handler(generator.next(res));
+		}, err => {
+		  return handler(generator.throw(err));
+		});
 	  }
-	  let awaitResults = [];
-	  callNext();
-	
-	  return awaitResults;
+  
+	  try {
+		return handler(generator.next());
+	  } catch (err) {
+		return Promise.reject(err);
+	  }
+
 }
