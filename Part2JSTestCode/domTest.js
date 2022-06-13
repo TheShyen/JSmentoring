@@ -5,7 +5,15 @@ console.log(document.body); // <body>...</body>
 for (let i = 0; i < document.body.childNodes.length; i++) {
     console.log(document.body.childNodes[i]);
 }
-
+/* body
+domTest.js:6 #text
+domTest.js:6 h1
+domTest.js:6 #text
+domTest.js:6 h2
+domTest.js:6 #text
+domTest.js:6 div
+domTest.js:6 #text
+domTest.js:6 script */
 
 console.log(document.body.childNodes[0] === document.body.firstChild); // true
 console.log(Array.isArray(document.body.childNodes)); // false 
