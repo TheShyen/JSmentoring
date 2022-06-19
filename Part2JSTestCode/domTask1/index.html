@@ -29,7 +29,20 @@
                 document.getElementById("mouse").innerHTML =
                     Math.round(e.clientX) + ":" + Math.round(e.clientY);
             };
-
+            // 2 пункт
+            document.addEventListener(
+                "mousemove",
+                function (ev) {
+                    document.getElementById("cursorCoord").style.transform =
+                        "translateY(" + (ev.clientY) + "px)";
+                    document.getElementById("cursorCoord").style.transform +=
+                        "translateX(" + (ev.clientX) + "px)";
+                }
+            );
+            document.onmousemove = function (e) {
+                document.getElementById("cursorCoord").innerHTML =
+                    Math.round(e.clientX) + ":" + Math.round(e.clientY);
+            };
         </script>
     </body>
 </html>
