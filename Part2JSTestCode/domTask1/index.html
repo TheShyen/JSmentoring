@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <style type="text/css">
+            #cursorCoord {
+                position: fixed; /* Floating above */ /* Sticking effect */
+            }
+        </style>
+        <title>Document</title>
+    </head>
+    <body>
+        <div>Координаты мыши: <span id="mouse"></span></div>
+        <div id="cursorCoord"></div>
+        <script>
+            /*[DOM, базовые вещи]
+             Каждый пункт решения - 1 коммит в гит. Чтоб можно было увидеть решение по пунктам
+
+            1. Выводить текущие координаты курсора при перемещении его по документу
+
+            2. Координаты "прикрепить к курсору" - чтобы было 2 цифры, которые перемещаются вместе с курсором рядом с ним
+
+            3. Сделать красный квадрат 500x500 пикселей по центру страницы, и прикреплять и регистрировать координаты только когда мы двигаем курсор в нем. Когда за ним - убирать отображение координат. (изменено)
+            [14:20] */
+            // 1 пункт
+            document.onmousemove = function (e) {
+                document.getElementById("mouse").innerHTML =
+                    Math.round(e.clientX) + ":" + Math.round(e.clientY);
+            };
+
+        </script>
+    </body>
+</html>
