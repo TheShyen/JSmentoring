@@ -14,6 +14,15 @@
     <body>
         <div>Координаты мыши: <span id="mouse"></span></div>
         <div id="cursorCoord"></div>
+        <div
+            style="
+                width: 500px;
+                height: 500px;
+                background: red;
+                margin: 80px auto;
+            "
+            id="square"
+        ></div>
         <script>
             /*[DOM, базовые вещи]
              Каждый пункт решения - 1 коммит в гит. Чтоб можно было увидеть решение по пунктам
@@ -25,12 +34,12 @@
             3. Сделать красный квадрат 500x500 пикселей по центру страницы, и прикреплять и регистрировать координаты только когда мы двигаем курсор в нем. Когда за ним - убирать отображение координат. (изменено)
             [14:20] */
             // 1 пункт
-            document.onmousemove = function (e) {
+            /* document.onmousemove = function (e) {
                 document.getElementById("mouse").innerHTML =
                     Math.round(e.clientX) + ":" + Math.round(e.clientY);
-            };
+            }; */
             // 2 пункт
-            document.addEventListener(
+            /* document.addEventListener(
                 "mousemove",
                 function (ev) {
                     document.getElementById("cursorCoord").style.transform =
@@ -38,11 +47,34 @@
                     document.getElementById("cursorCoord").style.transform +=
                         "translateX(" + (ev.clientX) + "px)";
                 }
-            );
-            document.onmousemove = function (e) {
+            ); */
+            /*  document.onmousemove = function (e) {
                 document.getElementById("cursorCoord").innerHTML =
                     Math.round(e.clientX) + ":" + Math.round(e.clientY);
-            };
+            };  */
+            // 3 пункт
+            document
+                .getElementById("square")
+                .addEventListener("mouseover", function (ev) {
+                    document.addEventListener("mousemove", function (ev) {
+                        document.getElementById("cursorCoord").style.transform =
+                            "translateY(" + ev.clientY + "px)";
+                        document.getElementById(
+                            "cursorCoord"
+                        ).style.transform += "translateX(" + ev.clientX + "px)";
+                    });
+                    document.onmousemove = function (e) {
+                        document.getElementById("cursorCoord").innerHTML =
+                            Math.round(e.clientX) + ":" + Math.round(e.clientY);
+                    };
+                });
+            document
+                .getElementById("square")
+                .addEventListener("mouseout", function (ev) {
+                    document.onmousemove = function (e) {
+                        document.getElementById("cursorCoord").innerHTML = "";
+                    };
+                });
         </script>
     </body>
 </html>
