@@ -4,11 +4,11 @@
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="./style.css">
+        <link rel="stylesheet" href="./style.css" />
         <title>Document</title>
     </head>
     <body>
-        <div class="container" id = "abob" style="background: white">
+        <div class="container" id="abob" style="background: white">
             <div class="b_1" style="width: 100px; height: 100px">
                 <div class="b_2" style="width: 80px; height: 80px">
                     <div class="b_3" style="width: 60px; height: 60px"></div>
@@ -17,17 +17,45 @@
         </div>
 
         <script>
-           /* 
+            /* 
             1. Сделать контейнер с 3мя чайлдами: каждый чайлд это матрешка из 3х div - 100x100 div, внутри которого 80x80 div, внутри которого 60x60 пикселей div
             2. Всем дивам в этом контейнере сделать белый фоновой цвет с помощью свойства background.
             3. Добавить один обработчик на клик на контейнер. При нажатии на любой див в контейнере, на 300 мс окрашивать каждый div в красный фон, потом окрашивать его парента, потом его парента итд. Контейнер сам не окрашивать.
             пример: клик на 80x80 div, окрашиваем его на 300мс в красный, потом возвращаем ему белый и окрашиваем его парента 100x100 на 300 мс в красный, потом возвращаем ему  белый.
             */
             let cont = document.querySelector(".container");
-            cont.addEventListener("click", function (event) {
+            cont.addEventListener("click", async function hand(event) {
                 let ev = event.target;
-                ev.style.background = "red";
-                setTimeout(() => ev.style.background = "", 500)   
+                let promise = new Promise((resolve, reject) => {
+                    if (ev.className == event.currentTarget.className) {
+                        return;
+                    }
+                    ev.style.background = "red";
+                    setTimeout(() => resolve('ev.style.background = "";'), 300);
+                });
+                let res = await promise;
+                eval(res);
+                let promise2 = new Promise((resolve, reject) => {
+                    ev = ev.parentElement;
+                    if (ev.className == "container") {
+                        return;
+                    }
+                    ev.style.background = "red";
+                    setTimeout(() => resolve('ev.style.background = "";'), 300);
+                });
+                let res2 = await promise2;
+                eval(res2);
+                let promise3 = new Promise((resolve, reject) => {
+                    ev = ev.parentElement;
+                    if (ev.className == "container") {
+                        return;
+                    }
+                    ev.style.background = "red";
+                    setTimeout(() => resolve('ev.style.background = "";'), 300);
+                });
+                let res3 = await promise3;
+                eval(res3);
+                
             });
         </script>
     </body>
