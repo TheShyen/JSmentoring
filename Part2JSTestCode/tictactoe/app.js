@@ -1,5 +1,4 @@
-"use strict";
-
+'use strict';
 const cells = document.getElementById("cells");
 const result = document.getElementById('result');
 const board = document.querySelectorAll('.box');
@@ -24,24 +23,38 @@ class Game {
         resetBtn.addEventListener('click', () => {
             this.resetGame();
         });
+        this.cellList = [];
+        this.rend();
         cells.addEventListener('click', this.humanPlay());
         this.cells = cells; 
         this.board = Array.from(Array(9).keys());
         this.winCombos = winCombos;
         this.checkWinner(huPlayer);
     }
-
     resetGame() {
         result.innerHTML = '';
         board.forEach(e => e.innerHTML = "");
+        this.cellList = [];
+        this.rend();
+        window.reload();
+    }
+
+    rend() {
+        for (let i = 0; i < 9; i++) {
+            let dd = document.getElementById(i);
+            this.cellList.push(dd);
+        }   
+        
     }
     humanPlay() {
         return (e) => {
             this.turnCount++;
             if (e.target.className == "box") {
                e.target.innerHTML = huPlayer;
+               let id = e.target.getAttribute("id");
+               this.board[+id] = huPlayer;
             }
-            if (this.checkWinner(board, huPlayer)) {
+            if (this.checkWinner(this.board, huPlayer)) {
                 result.innerHTML = "GJ";
                 return;
             } 
@@ -50,18 +63,28 @@ class Game {
                 return;
             }
             const bestMove = this.minimax(this.board, aiPlayer);
-            console.log(bestMove);
+            console.log(this.cellList);
+            this.board[bestMove.idx] = aiPlayer;
+            this.cellList[bestMove.idx].innerHTML = aiPlayer;
+            if(this.checkWinner(this.board, aiPlayer)) {
+                result.innerHTML = "AI";
+            }
              
         };
     }
     checkWinner(board, player) {
-        for (let i = 0; i < winCombos.length; i++){
-            if(board[winCombos[i][0]].innerHTML == player && board[winCombos[i][1]].innerHTML == player && board[winCombos[i][2]].innerHTML == player) {
-                return true;
-            }
-            return false;
+        if (board[0] === player && board[1] === player && board[2] === player ||
+          board[3] === player && board[4] === player && board[5] === player ||
+          board[6] === player && board[7] === player && board[8] === player ||
+          board[0] === player && board[3] === player && board[6] === player ||
+          board[1] === player && board[4] === player && board[7] === player ||
+          board[2] === player && board[5] === player && board[8] === player ||
+          board[0] === player && board[4] === player && board[8] === player ||
+          board[2] === player && board[4] === player && board[6] === player) {
+          return true;
         }
-    }
+        return false;
+      }
 
     minimax(board, player) {
         if (this.checkWinner(board, huPlayer)) {
@@ -90,11 +113,10 @@ class Game {
                 move.score = payload.score;
             }
             board[emptyCells[i]] = move.idx;
-            move.push(move);
+            moves.push(move);
         }
 
         let bestMove = null;
-
         for (let i = 0; i < moves.length; i++) {
             if (player === huPlayer) {
                 let bestScore = +Infinity;
