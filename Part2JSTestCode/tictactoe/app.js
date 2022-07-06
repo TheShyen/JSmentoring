@@ -1,77 +1,77 @@
-'use strict';
+"use strict";
 const cells = document.getElementById("cells");
-const result = document.getElementById('result');
-const board = document.querySelectorAll('.box');
-const resetBtn = document.getElementById('restart');
-const aiPlayer = 'X', huPlayer = 'O';
-const winCombos = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-];
+const result = document.getElementById("result");
+const cell = document.querySelectorAll('.box');
+const resetBtn = document.getElementById("restart");
+const aiPlayer = "X",
+    huPlayer = "O";
 
 class Game {
     constructor() {
         this.turn = Math.floor(Math.random() * 2);
         this.result = result;
         this.turnCount = 0;
-        resetBtn.addEventListener('click', () => {
+        resetBtn.addEventListener("click", () => {
             this.resetGame();
         });
         this.cellList = [];
         this.rend();
-        cells.addEventListener('click', this.humanPlay());
-        this.cells = cells; 
-        this.board = Array.from(Array(9).keys());
-        this.winCombos = winCombos;
+        cells.addEventListener("click", this.humanPlay());
+        this.cells = cells;
         this.checkWinner(huPlayer);
     }
-    resetGame() {
-        result.innerHTML = '';
-        board.forEach(e => e.innerHTML = "");
-        this.cellList = [];
-        this.rend();
-        window.reload();
-    }
-
     rend() {
         for (let i = 0; i < 9; i++) {
             let dd = document.getElementById(i);
             this.cellList.push(dd);
-        }   
-        
+        }
+        this.board = Array.from(Array(9).keys());
     }
+
+    resetGame() {
+        this.board = Array.from(Array(9).keys());
+        result.innerHTML = "";
+        cell.forEach((e) => (e.innerHTML = ""));
+        this.turnCount = 0;
+        this.cellList = [];
+        this.rend();
+    }
+
     humanPlay() {
         return (e) => {
             this.turnCount++;
             if (e.target.className == "box") {
-               e.target.innerHTML = huPlayer;
-               let id = e.target.getAttribute("id");
-               this.board[+id] = huPlayer;
+                let id = e.target.getAttribute("id");
+                this.cellList[+id].innerHTML = huPlayer;
+                this.board[+id] = huPlayer;
             }
             if (this.checkWinner(this.board, huPlayer)) {
-                result.innerHTML = "GJ";
-                return;
-            } 
-            if(this.turnCount >= 9) {
-                result.innerHTML = "GG";
+                result.innerHTML = "You win!";
                 return;
             }
-            const bestMove = this.minimax(this.board, aiPlayer);
-            console.log(this.cellList);
-            this.board[bestMove.idx] = aiPlayer;
-            this.cellList[bestMove.idx].innerHTML = aiPlayer;
-            if(this.checkWinner(this.board, aiPlayer)) {
-                result.innerHTML = "AI";
+            if (this.turnCount >= 9) {
+                result.innerHTML = "Draw!";
+                return;
             }
-             
+            this.makeAiTurn();
         };
     }
+
+    makeAiTurn() {
+        this.turnCount += 1;
+        const bestMove = this.minimax(this.board, aiPlayer);
+        this.board[bestMove.idx] = aiPlayer;
+        this.cellList[bestMove.idx].innerHTML = aiPlayer;
+        if (this.turnCount >= 9) {
+            result.innerHTML = "Draw!";
+            return;
+        }
+        if (this.checkWinner(this.board, aiPlayer)) {
+            result.innerHTML = "AI win!";
+            return;
+        }
+    }
+
     checkWinner(board, player) {
         if (board[0] === player && board[1] === player && board[2] === player ||
           board[3] === player && board[4] === player && board[5] === player ||
@@ -84,18 +84,16 @@ class Game {
           return true;
         }
         return false;
-      }
+    }
 
     minimax(board, player) {
-        if (this.checkWinner(board, huPlayer)) {
-            return {score: -1};
-        }
-        if (this.checkWinner(board, huPlayer)) {
-            return {score: 1};
-        }
         const emptyCells = this.findEmptyCells(board);
-        if(emptyCells.length === 0) {
-            return {score: 0};
+        if (this.checkWinner(board, huPlayer)) {
+            return { score: -1 };
+        } else if (this.checkWinner(board, aiPlayer)) {
+            return { score: 1 };
+        } else if (emptyCells.length === 0) {
+            return { score: 0 };
         }
 
         let moves = [];
@@ -117,58 +115,32 @@ class Game {
         }
 
         let bestMove = null;
-        for (let i = 0; i < moves.length; i++) {
-            if (player === huPlayer) {
-                let bestScore = +Infinity;
-                if (moves[i].score < bestScore) {
-                    bestScore = moves[i].score;
-                    bestMove = i;
-                }
-            }
-            if (player === aiPlayer) {
-                let bestScore = -Infinity;
+
+        if (player === aiPlayer) {
+            let bestScore = -Infinity;
+            for (let i = 0; i < moves.length; i++) {
                 if (moves[i].score > bestScore) {
                     bestScore = moves[i].score;
                     bestMove = i;
                 }
             }
+        } else {
+            let bestScore = Infinity;
+            for (let i = 0; i < moves.length; i++) {
+                if (moves[i].score < bestScore) {
+                    bestScore = moves[i].score;
+                    bestMove = i;
+                }
+            }
         }
+
         return moves[bestMove];
     }
 
     findEmptyCells(board) {
-        return board.filter((c) => c!== huPlayer && c !== aiPlayer);
+        return board.filter((c) => c !== huPlayer && c !== aiPlayer);
     }
+
 }
+
 new Game();
-
-
-
-
-
-
-
-
-
-/* let move = 0;
-
-const clickBox = (e) => {
-    if (e.target.className == "box") {
-        move % 2 === 0 ? e.target.innerHTML = "X" : e.target.innerHTML = "0";
-        move++;
-    }
-};
-const winCombos = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-];
-
-
-
-board.addEventListener("click", clickBox); */
