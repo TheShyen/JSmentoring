@@ -1,10 +1,12 @@
 "use strict";
-const cells = document.getElementById("cells");
-const result = document.getElementById("result");
+const cells = document.getElementById('cells');
+const result = document.getElementById('result');
 const cell = document.querySelectorAll('.box');
-const resetBtn = document.getElementById("restart");
-const aiPlayer = "X",
-    huPlayer = "O";
+const resetBtn = document.getElementById('restart');
+const modalResult = document.getElementById('modal-result-wrapper');
+const overlay = document.getElementById('overlay');
+const aiPlayer = "О",
+    huPlayer = "Х";
 
 class Game {
     constructor() {
@@ -12,6 +14,7 @@ class Game {
         this.result = result;
         this.turnCount = 0;
         resetBtn.addEventListener("click", () => {
+            modalResult.style.display = 'none';
             this.resetGame();
         });
         this.cellList = [];
@@ -47,10 +50,12 @@ class Game {
             }
             if (this.checkWinner(this.board, huPlayer)) {
                 result.innerHTML = "You win!";
+                modalResult.style.display = 'block';
                 return;
             }
             if (this.turnCount >= 9) {
                 result.innerHTML = "Draw!";
+                modalResult.style.display = 'block';
                 return;
             }
             this.makeAiTurn();
@@ -58,18 +63,22 @@ class Game {
     }
 
     makeAiTurn() {
-        this.turnCount += 1;
-        const bestMove = this.minimax(this.board, aiPlayer);
-        this.board[bestMove.idx] = aiPlayer;
-        this.cellList[bestMove.idx].innerHTML = aiPlayer;
-        if (this.turnCount >= 9) {
-            result.innerHTML = "Draw!";
-            return;
-        }
-        if (this.checkWinner(this.board, aiPlayer)) {
-            result.innerHTML = "AI win!";
-            return;
-        }
+        setTimeout(() => {
+            this.turnCount += 1;
+            const bestMove = this.minimax(this.board, aiPlayer);
+            this.board[bestMove.idx] = aiPlayer;
+            this.cellList[bestMove.idx].innerHTML = aiPlayer;
+            if (this.turnCount >= 9) {
+                result.innerHTML = "Draw!";
+                modalResult.style.display = 'block';
+                return;
+            }
+            if (this.checkWinner(this.board, aiPlayer)) {
+                result.innerHTML = "AI win!";
+                modalResult.style.display = 'block';
+                return;
+            }
+        }, 400);
     }
 
     checkWinner(board, player) {
